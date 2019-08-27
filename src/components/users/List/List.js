@@ -2,14 +2,17 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 export default ({ users }) => {
+  // TODO add grade to admin view
   const list = users.map(user => (
     <li key={user._id}>
       <Link to={`/users/${user._id}/assignments`}>
-      {
-          (user.first_name) ? user.first_name : user.email
-      }
+      {user.first_name }{'- '}
+      { user.email}
       : {user.assignments.length} Assignments
       </Link>
+
+      <aside></aside>
+
     </li>
   ))
 
