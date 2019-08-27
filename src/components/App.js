@@ -17,7 +17,9 @@ class App extends React.Component {
     super()
     this.state = {
       currentUserId: null,
-      loading: true
+      currentName: null,
+      loading: true,
+      displayError: false
     }
 
     this.loginUser = this.loginUser.bind(this)
@@ -26,9 +28,14 @@ class App extends React.Component {
   }
 
   async componentDidMount () {
+    // window.localStorage.removeItem('journal-app')
     if (token.getToken()) {
       const { user } = await auth.profile();
-      this.setState({ currentUserId: user._id, loading: false });
+      this.setState({ 
+        currentUserId: user._id, 
+        currentName: user.first_name,
+        loading: false 
+      });
     } else {
       this.setState({ loading: false })
     }
@@ -36,41 +43,63 @@ class App extends React.Component {
 
   async loginUser (user) {
     const response = await auth.login(user)
-    await token.setToken(response)
-    
-    const profile = await auth.profile()
-    this.setState({ currentUserId: profile.user._id })
+    if (response.status === 401) {
+      this.setState({displayError: true})
+      return
+    } else {
+      this.setState({displayError: false})
+      await token.setToken(response)
+      
+      const profile = await auth.profile()
+      this.setState({ 
+        currentUserId: profile.user._id,
+        currentName: profile.first_name
+      })
+    }
   }
 
   logoutUser () {
     token.clearToken()
-    this.setState({ currentUserId: null })
+    this.setState({ 
+      currentUserId: null,
+      currentName: null
+    })
   }
 
   async signupUser (user) {
     const response = await auth.signup(user)
-    await token.setToken(response)
-    
-    const profile = await auth.profile()
-    this.setState({ currentUserId: profile.user._id })
+    if (response.status === 401) {
+      this.setState({displayError: true})
+      return
+    } else {
+      this.setState({displayError: false})
+      await token.setToken(response)
+      
+      const profile = await auth.profile()
+      this.setState({ 
+        currentUserId: profile.user._id,
+        currentUsername: profile.name
+      })
+    }  
   }
 
   render () {
-    const { currentUserId, loading } = this.state
-    if (loading) return <span />
+    const { currentUserId, currentName, loading, displayError } = this.state
+    if (loading) return <span>Loading...</span>
 
     return (
       <Router>
         <Header />
         <Navigation
           currentUserId={currentUserId}
+          currentName={currentName}
           logoutUser={this.logoutUser} />
         <Switch>
           <Route path='/login' exact component={() => {
-            return currentUserId ? <Redirect to='/users' /> : <Login onSubmit={this.loginUser} />
+            return currentUserId ? <Redirect to='/users' /> : <Login onSubmit={this.loginUser} displayError={displayError} />
           }} />
           <Route path='/signup' exact component={() => {
-            return currentUserId ? <Redirect to='/users' /> : <Signup onSubmit={this.signupUser} />
+            return currentUserId ? <Redirect to='/users' /> : <Signup onSubmit={this.signupUser} displayError={displayError}/>
           }} />
 
           <Route path='/users' render={() => {

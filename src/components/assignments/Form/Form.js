@@ -3,9 +3,9 @@ import React from 'react'
 export default class Form extends React.Component {
   constructor (props) {
     super(props)
-    const { post = {} } = this.props
-    const { content = '', emotion = '' } = post
-    this.state = { content, emotion }
+    const { assignment = {} } = this.props
+    const { title = '', link = '', description='' } = assignment
+    this.state = { title, link, description }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -17,10 +17,10 @@ export default class Form extends React.Component {
 
   handleSubmit (e) {
     e.preventDefault()
-    const { post } = this.props
+    const { assignment } = this.props
 
-    if (post && post._id) {
-      const body = Object.assign({}, this.state, { _id: post._id })
+    if (assignment && assignment._id) {
+      const body = Object.assign({}, this.state, { _id: assignment._id })
       this.props.onSubmit(body)
     } else {
       this.props.onSubmit(this.state)
@@ -31,24 +31,34 @@ export default class Form extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <div className='form-group'>
-          <label htmlFor='emotion'>Emotion</label>
+          <label htmlFor='title'>Title</label>
           <input
             className='form-control'
-            id='emotion'
+            id='title'
             onChange={this.handleChange}
-            name='emotion'
+            name='title'
             type='text'
-            value={this.state.emotion} />
+            value={this.state.title} />
         </div>
         <div className='form-group'>
-          <label htmlFor='content'>Content</label>
+          <label htmlFor='link'>Link</label>
           <textarea
             className='form-control'
-            id='content'
+            id='link'
             onChange={this.handleChange}
-            name='content'
+            name='link'
             type='text'
-            value={this.state.content} />
+            value={this.state.link} />
+        </div>
+        <div className='form-group'>
+          <label htmlFor='description'>Description</label>
+          <textarea
+            className='form-control'
+            id='description'
+            onChange={this.handleChange}
+            name='description'
+            type='text'
+            value={this.state.description} />
         </div>
         <button type='submit' className='btn btn-primary'>Submit</button>
       </form>
