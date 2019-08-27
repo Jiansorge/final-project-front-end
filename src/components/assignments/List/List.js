@@ -9,6 +9,8 @@ export default ({ currentUserId, destroyAssignment, user }) => {
         <p className='card-text'>{ assignment.title }</p>
         <blockquote className='blockquote mb-0'>
           <footer className='blockquote-footer'> { assignment.link }</footer>
+          <footer className='blockquote-footer'> { assignment.description }</footer>
+
         </blockquote>
       </div>
       <Actions
