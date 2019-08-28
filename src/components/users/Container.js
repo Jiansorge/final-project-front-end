@@ -30,7 +30,7 @@ export default class Container extends React.Component {
   }
 
   render () {
-    const { currentUserId } = this.props
+    const { currentUserId, admin } = this.props
     const { users, loading } = this.state
     if (loading) return <span/>
 
@@ -40,7 +40,8 @@ export default class Container extends React.Component {
         <AssignmentsContainer
           currentUserId={currentUserId}
           refreshUsers={this.refreshUsers}
-          users={users} />
+          users={users} 
+          admin={admin}/>
       </main>
     )
   }

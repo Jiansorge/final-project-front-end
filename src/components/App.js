@@ -19,7 +19,8 @@ class App extends React.Component {
       currentUserId: null,
       currentName: null,
       loading: true,
-      displayError: false
+      displayError: false,
+      admin: false
     }
 
     this.loginUser = this.loginUser.bind(this)
@@ -34,6 +35,7 @@ class App extends React.Component {
       this.setState({ 
         currentUserId: user._id, 
         currentName: user.first_name,
+        admin: user.admin,
         loading: false 
       });
     } else {
@@ -53,7 +55,8 @@ class App extends React.Component {
       const profile = await auth.profile()
       this.setState({ 
         currentUserId: profile.user._id,
-        currentName: profile.first_name
+        currentName: profile.first_name,
+        admin: profile.admin
       })
     }
   }
@@ -62,7 +65,8 @@ class App extends React.Component {
     token.clearToken()
     this.setState({ 
       currentUserId: null,
-      currentName: null
+      currentName: null,
+      admin: null
     })
   }
 
@@ -78,13 +82,13 @@ class App extends React.Component {
       const profile = await auth.profile()
       this.setState({ 
         currentUserId: profile.user._id,
-        currentUsername: profile.name
+        currentUsername: profile.name,
       })
     }  
   }
 
   render () {
-    const { currentUserId, currentName, loading, displayError } = this.state
+    const { currentUserId, currentName, loading, displayError, admin } = this.state
     if (loading) return <span>Loading...</span>
 
     return (
@@ -93,7 +97,8 @@ class App extends React.Component {
         <Navigation
           currentUserId={currentUserId}
           currentName={currentName}
-          logoutUser={this.logoutUser} />
+          logoutUser={this.logoutUser} 
+          admin={admin}/>
         <Switch>
           <Route path='/login' exact component={() => {
             return currentUserId ? <Redirect to='/users' /> : <Login onSubmit={this.loginUser} displayError={displayError} />
@@ -104,7 +109,7 @@ class App extends React.Component {
 
           <Route path='/users' render={() => {
             return currentUserId
-              ? <UsersContainer currentUserId={currentUserId} />
+              ? <UsersContainer currentUserId={currentUserId} admin={admin} />
               : <Redirect to='/login' />
           }} />
 

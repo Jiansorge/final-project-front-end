@@ -7,6 +7,8 @@ import * as assignments from '../../api/assignments'
 
 // Components
 import List from './List/List'
+import ListUngraded from './List/List.Ungraded'
+import ListGraded from './List/List.Graded'
 import EditForm from './Form/Edit.Form'
 import NewForm from './Form/New.Form'
 
@@ -66,8 +68,18 @@ class Container extends React.Component {
     history.push(`/users/${currentUserId}/assignments`)
   }}
 
+  async saveGrade (assignment) {
+    const { currentUserId, history, refreshUsers } = this.props
+
+    await assignments.updateGrade({ user: { _id: 
+      currentUserId }, assignment })
+    await refreshUsers()
+
+    history.push(`/users/${currentUserId}/assignments/ungraded`)
+  }
+
   render () {
-    const { currentUserId, users, assignmentError } = this.props
+    const { currentUserId, users, assignmentError, admin} = this.props
     return (
       <>
         <Route path='/users/:userId/assignments' exact component={({ match }) => {
@@ -76,9 +88,36 @@ class Container extends React.Component {
             <List
               currentUserId={currentUserId}
               destroyAssignment={this.destroyAssignment}
-              user={user} />
+              user={user} 
+              admin={admin}/>
           )
         }} />
+
+
+        <Route path='/users/:userId/assignments/ungraded' exact component={({ match }) => {
+          const user = users.find(user => user._id === match.params.userId)
+          return (
+            <ListUngraded
+              currentUserId={currentUserId}
+              destroyAssignment={this.destroyAssignment}
+              user={user} 
+              onSubmit={this.saveGrade}
+              admin={admin}/>
+          )
+        }} />
+        <Route path='/users/:userId/assignments/graded' exact component={({ match }) => {
+          const user = users.find(user => user._id === match.params.userId)
+          return (
+            <ListGraded
+              currentUserId={currentUserId}
+              destroyAssignment={this.destroyAssignment}
+              user={user} 
+              onSubmit={this.saveGrade}
+              admin={admin}/>
+          )
+        }} />
+
+
         <Route path='/users/:userId/assignments/new' exact component={() => {
           return <NewForm onSubmit={this.createAssignment} assignmentError={assignmentError}/>
         }} />
