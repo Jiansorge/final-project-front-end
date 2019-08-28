@@ -12,38 +12,14 @@ export default ({ currentUserId, destroyAssignment, user, saveGrade, admin }) =>
           <footer className='blockquote-footer'> { assignment.description }</footer>
 
         </blockquote>
-        {/* TODO {
-          user.admin 
-          && (
-            <>
-                <div className='form-group'>
-                  <label htmlFor='student-grade'>Student Grade</label>
-                  <input
-                    type='checkbox'
-                    className='form-control'
-                    id='student-grade'
-                    onChange={this.handleChange}
-                    name='description'
-                    type='text'
-                    value={this.state.studentGrade} />
-                </div>
-              </Link>
-              <button
-                className='btn btn-link text-danger'
-                onClick={() => saveGrade(assignment)}>
-                Save Grade
-              </button>
-            </>
-          )
-        } */}
+
       </div>
       <Actions
         currentUserId={currentUserId}
         destroyAssignment={destroyAssignment}
         assignment={assignment}
         user={user}
-        saveGrade={saveGrade} 
-        admin={admin}/>
+       />
     </div>
   ))
 

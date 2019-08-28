@@ -17,10 +17,3 @@ export const updateAssignment = ({ user, assignment }) => {
   const options = { body: assignment, method: 'PUT' }
   return request(path, options)
 }
-
-// TODO save grade
-export const updateGrade = ({ user, assignment }) => {
-  const path = `/api/users/${user._id}/assignments/${assignment._id}`
-  const options = { body: assignment, method: 'PUT' }
-  return request(path, options)
-}

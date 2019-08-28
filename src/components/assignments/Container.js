@@ -1,6 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 
 // Helpers
 import * as assignments from '../../api/assignments'
@@ -71,7 +71,7 @@ class Container extends React.Component {
   async saveGrade (assignment) {
     const { currentUserId, history, refreshUsers } = this.props
 
-    await assignments.updateGrade({ user: { _id: 
+    await assignments.updateAssignment({ user: { _id: 
       currentUserId }, assignment })
     await refreshUsers()
 
@@ -93,28 +93,28 @@ class Container extends React.Component {
           )
         }} />
 
-
         <Route path='/users/:userId/assignments/ungraded' exact component={({ match }) => {
           const user = users.find(user => user._id === match.params.userId)
-          return (
+          return admin ? (
             <ListUngraded
               currentUserId={currentUserId}
               destroyAssignment={this.destroyAssignment}
               user={user} 
               onSubmit={this.saveGrade}
               admin={admin}/>
-          )
+          ) : <Redirect to='/users' />
         }} />
+
         <Route path='/users/:userId/assignments/graded' exact component={({ match }) => {
           const user = users.find(user => user._id === match.params.userId)
-          return (
+          return admin ?(
             <ListGraded
               currentUserId={currentUserId}
               destroyAssignment={this.destroyAssignment}
               user={user} 
               onSubmit={this.saveGrade}
               admin={admin}/>
-          )
+          ) : <Redirect to='/users' />
         }} />
 
 
@@ -130,6 +130,16 @@ class Container extends React.Component {
     )
   }
 }
+
+// return admin ?(
+//   <ListGraded
+//     currentUserId={currentUserId}
+//     destroyAssignment={this.destroyAssignment}
+//     user={user} 
+//     onSubmit={this.saveGrade}
+//     admin={admin}/>
+// ) : <Redirect to='/users/:userId/assignments' />
+// }} />
 
 
 export default withRouter(Container)
