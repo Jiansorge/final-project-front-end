@@ -5,7 +5,7 @@ export default class Form extends React.Component {
     super(props)
     const { assignment = {} } = this.props
     const { title = '', link = '', description='' } = assignment
-    this.state = { title, link, description }
+    this.state = { title, link, description, errors:[] }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -15,6 +15,7 @@ export default class Form extends React.Component {
     this.setState({ [name]: value })
   }
 
+  // todo copy into grade submit
   handleSubmit (e) {
     e.preventDefault()
     const { assignment } = this.props
@@ -22,6 +23,8 @@ export default class Form extends React.Component {
     if (assignment && assignment._id) {
       const body = Object.assign({}, this.state, { _id: assignment._id })
       this.props.onSubmit(body)
+      .catch((errors) => this.setState({errors:errors}))
+
     } else {
       this.props.onSubmit(this.state)
     }
@@ -61,6 +64,8 @@ export default class Form extends React.Component {
             value={this.state.description} />
         </div>
         <button type='submit' className='btn btn-primary'>Submit</button>
+        { this.state.errors.length > 0 && <span className='text-danger'>{this.state.errors}</span>}
+
       </form>
     )
   }

@@ -17,9 +17,9 @@ class App extends React.Component {
     super()
     this.state = {
       currentUserId: null,
-      currentName: null,
+      currentName: null, // TODO
       loading: true,
-      displayError: false,
+      errors: [],
       admin: false
     }
 
@@ -46,10 +46,10 @@ class App extends React.Component {
   async loginUser (user) {
     const response = await auth.login(user)
     if (response.status === 401) {
-      this.setState({displayError: true})
+      this.setState({errors: response.message})
       return
     } else {
-      this.setState({displayError: false})
+      this.setState({errors:[]})
       await token.setToken(response)
       
       const profile = await auth.profile()
@@ -58,6 +58,7 @@ class App extends React.Component {
         currentName: profile.first_name,
         admin: profile.admin
       })
+
     }
   }
 
@@ -72,11 +73,13 @@ class App extends React.Component {
 
   async signupUser (user) {
     const response = await auth.signup(user)
+    .catch((errors)=>this.setState({errors:errors}))
+
     if (response.status === 401) {
-      this.setState({displayError: true})
+      this.setState({errors: response.message})
       return
     } else {
-      this.setState({displayError: false})
+      this.setState({errors: []})
       await token.setToken(response)
       
       const profile = await auth.profile()
@@ -84,11 +87,12 @@ class App extends React.Component {
         currentUserId: profile.user._id,
         currentUsername: profile.name,
       })
+
     }  
   }
 
   render () {
-    const { currentUserId, currentName, loading, displayError, admin } = this.state
+    const { currentUserId, currentName, loading, errors, admin } = this.state
     if (loading) return <span>Loading...</span>
 
     return (
@@ -101,10 +105,10 @@ class App extends React.Component {
           admin={admin}/>
         <Switch>
           <Route path='/login' exact component={() => {
-            return currentUserId ? <Redirect to='/users' /> : <Login onSubmit={this.loginUser} displayError={displayError} />
+            return currentUserId ? <Redirect to='/users' /> : <Login onSubmit={this.loginUser} errors={errors} />
           }} />
           <Route path='/signup' exact component={() => {
-            return currentUserId ? <Redirect to='/users' /> : <Signup onSubmit={this.signupUser} displayError={displayError}/>
+            return currentUserId ? <Redirect to='/users' /> : <Signup onSubmit={this.signupUser} errors={errors}/>
           }} />
 
           <Route path='/users' render={() => {

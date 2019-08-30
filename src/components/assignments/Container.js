@@ -21,6 +21,7 @@ class Container extends React.Component {
     this.createAssignment = this.createAssignment.bind(this)
     this.destroyAssignment = this.destroyAssignment.bind(this)
     this.editAssignment = this.editAssignment.bind(this)
+    this.saveGrade = this.saveGrade.bind(this)
   }
 
   async createAssignment (assignment) {
@@ -112,7 +113,7 @@ class Container extends React.Component {
               currentUserId={currentUserId}
               destroyAssignment={this.destroyAssignment}
               user={user} 
-              onSubmit={this.saveGrade}
+              saveGrade={this.saveGrade}
               admin={admin}/>
           ) : <Redirect to='/users' />
         }} />
@@ -130,16 +131,6 @@ class Container extends React.Component {
     )
   }
 }
-
-// return admin ?(
-//   <ListGraded
-//     currentUserId={currentUserId}
-//     destroyAssignment={this.destroyAssignment}
-//     user={user} 
-//     onSubmit={this.saveGrade}
-//     admin={admin}/>
-// ) : <Redirect to='/users/:userId/assignments' />
-// }} />
 
 
 export default withRouter(Container)

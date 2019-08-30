@@ -6,7 +6,10 @@ class Form extends React.Component {
     super(props)
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      first_name: '',
+      last_name: '',
+      errors:this.props.errors
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -26,6 +29,32 @@ class Form extends React.Component {
   render () {
     return (
       <form onSubmit={this.handleSubmit}>
+        { this.props.signup 
+        &&
+        <>
+        <div className='form-group'>
+          <label htmlFor='first_name'>First Name</label>
+          <input
+            className='form-control'
+            id='first_name'
+            onChange={this.handleChange}
+            name='first_name'
+            type='text'
+            value={this.state.first_name} />
+        </div>
+        <div className='form-group'>
+          <label htmlFor='last_name'>Last Name</label>
+          <input
+            className='form-control'
+            id='last_name'
+            onChange={this.handleChange}
+            name='last_name'
+            type='text'
+            value={this.state.last_name} />
+        </div>
+        </>
+        }
+        
         <div className='form-group'>
           <label htmlFor='email'>Email</label>
           <input
@@ -34,7 +63,8 @@ class Form extends React.Component {
             onChange={this.handleChange}
             name='email'
             type='text'
-            value={this.state.email} />
+            value={this.state.email} 
+            required/>
         </div>
         <div className='form-group'>
           <label htmlFor='password'>Password</label>
@@ -44,9 +74,11 @@ class Form extends React.Component {
             onChange={this.handleChange}
             name='password'
             type='password'
-            value={this.state.password} />
+            value={this.state.password} 
+            required />
         </div>
         <button type='submit' className='btn btn-primary'>Submit</button>
+        { this.state.errors && <span className='alert alert-danger'>{this.state.errors}</span>}
       </form>
     )
   }

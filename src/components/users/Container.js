@@ -17,6 +17,8 @@ export default class Container extends React.Component {
     }
 
     this.refreshUsers = this.refreshUsers.bind(this)
+    this.filterUsers = this.filterUsers.bind(this)
+
   }
 
   async componentDidMount () {
@@ -29,6 +31,13 @@ export default class Container extends React.Component {
     this.setState({ users: response })
   }
 
+  //TODO create score filtering mechanism
+  async filterUsers(){
+    const { response } = await users.fetchUsers()
+    this.setState({ users: response })
+
+  }
+
   render () {
     const { currentUserId, admin } = this.props
     const { users, loading } = this.state
@@ -36,12 +45,13 @@ export default class Container extends React.Component {
 
     return (
       <main className='container'>
-        <Route path='/users' exact component={() => <List users={users} />} />
+        <Route path='/users' exact component={() => <List users={users} admin={admin}/>} />
         <AssignmentsContainer
           currentUserId={currentUserId}
           refreshUsers={this.refreshUsers}
           users={users} 
-          admin={admin}/>
+          admin={admin}
+          onSubmit={this.filterUsers}/>
       </main>
     )
   }

@@ -4,7 +4,7 @@ import React from 'react'
 export default class GradeActions extends React.Component {
   constructor (props) {
     super(props)
-    const { assignment, currentUserId,  saveGrade  } = this.props
+    const { assignment } = this.props
     const { grade='', max_grade=''} = assignment
     this.state = { 
       grade, 
@@ -33,20 +33,22 @@ export default class GradeActions extends React.Component {
   
 
   render(){
-    const { assignment, admin, saveGrade } = this.state
+    const { grade, max_grade} = this.state
     return(
   <div className='card-footer text-muted d-flex justify-content-around'>
     {
-        <>
-          <div className='form-group'>
+      <form onSubmit={this.handleSubmit}>
+        <div className='form-group'>
             <label htmlFor='student-grade'>Student Grade</label>
             <input
               type='text'
               className='form-control'
-              id='student-grade'
+              id='grade'
               onChange={this.handleChange}
-              name='student-grade'
-              value={this.state.grade} />
+              name='grade'
+              placeholder={grade}
+              value={grade?grade:""}
+              required/>
           </div>
           <div className='form-group'>
             <label htmlFor='max-grade'>Max Grade</label>
@@ -56,14 +58,16 @@ export default class GradeActions extends React.Component {
               id='max-grade'
               onChange={this.handleChange}
               name='max-grade'
-              value={this.state.maxGrade} />
+              placeholder={max_grade}
+              value={max_grade?max_grade:""}
+              required />
           </div>
           <button
             className='btn btn-link'
-            onClick={() => saveGrade(assignment)}>
+            onClick={() => this.saveGrade}>
             Save Grades
           </button>
-        </>
+        </form>
       //)
     }
   </div>
