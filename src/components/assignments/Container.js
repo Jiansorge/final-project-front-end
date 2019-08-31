@@ -81,6 +81,8 @@ class Container extends React.Component {
 
   render () {
     const { currentUserId, users, assignmentError, admin} = this.props
+
+    // TODO create new ungraded/graded routes to get all assignment types
     return (
       <>
         <Route path='/users/:userId/assignments' exact component={({ match }) => {

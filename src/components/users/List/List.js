@@ -10,17 +10,6 @@ class List  extends React.Component {
       users: this.props.users
     }
     this.sumGrades = this.sumGrades.bind(this)
-
-  }
-
-  handleChange ({ target: { name, value } }) {
-    this.setState({ [name]: value })
-  }
-
-  handleSubmit (e) {
-    e.preventDefault()
-    this.props.onSubmit(this.state)
-      .then(() => this.props.history.push('/users'))
   }
 
   sumGrades (user) {
