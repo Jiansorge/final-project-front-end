@@ -25,9 +25,7 @@ export default class GradeActions extends React.Component {
 
     if (assignment && assignment._id) {
       const body = Object.assign({}, this.state, { _id: assignment._id })
-      this.props.onSubmit(body)
     } else {
-      this.props.onSubmit(this.state)
     }
   }
   

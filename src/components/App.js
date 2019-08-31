@@ -17,7 +17,7 @@ class App extends React.Component {
     super()
     this.state = {
       currentUserId: null,
-      currentName: null, // TODO
+      currentName: null,
       loading: true,
       errors: [],
       admin: false

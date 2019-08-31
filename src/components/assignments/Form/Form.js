@@ -15,7 +15,6 @@ export default class Form extends React.Component {
     this.setState({ [name]: value })
   }
 
-  // todo copy into grade submit
   handleSubmit (e) {
     e.preventDefault()
     const { assignment } = this.props
